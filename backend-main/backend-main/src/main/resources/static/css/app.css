@@ -1,0 +1,69 @@
+
+@import url('dashboard.css');
+@import url('user-info-cards.css');
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.sidebar {
+    background-color: #f8f9fa; /* Light background for the sidebar */
+    padding: 0;
+    overflow-y: auto; /* Allows scrolling if content overflows the sidebar */
+}
+
+.content {
+    padding: 20px; /* Add some padding to the content area */
+    overflow-y: auto; /* Prevent the content from breaking the layout */
+}
+
+.min-vh-100 {
+    min-height: 100vh; /* Ensures sidebar covers full height of the viewport */
+}
+
+
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    font-size: 24px;
+}
+
+.card-title {
+    font-size: 18px;
+}
+
+.card-text {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.icon {
+    font-size: 50px;
+    margin-right: 10px;
+}
+
+.card.bg-primary {
+    background-color: #007bff;
+}
+
+.card.bg-success {
+    background-color: #28a745;
+}
+
+.card.bg-warning {
+    background-color: #ffc107;
+}
+
+
+
+

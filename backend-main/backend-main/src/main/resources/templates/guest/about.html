@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    <link th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" rel="stylesheet" />
+
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f1f5f9;
+            color: #333;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #003366;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        p {
+            font-size: 1rem;
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            margin: 20px 0;
+            padding-left: 40px;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        /* Navbar styles */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #0056b3;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            height: 50px;
+            object-fit: contain;
+        }
+
+        .menu {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 5px 10px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background-color: #004494;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        /* Main content styles */
+        .about-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        .about-section {
+            margin-bottom: 40px;
+        }
+
+        .about-section h1 {
+            font-size: 1.8rem;
+            color: #0056b3;
+            border-bottom: 2px solid #0056b3;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .team-photo {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .menu {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .about-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <a class="navbar-brand d-flex align-items-center" href="/">
+        <img th:src="@{/img/logo/logo4.png}" alt="Logo" width="65px" class="m-2">
+        <span class="fs-2 fw-bold text-white">Smart Lock</span>
+    </a>
+    <div class="menu">
+        <a th:href="@{/}" class="nav-item">HOME</a>
+        <a th:href="@{/about}" class="nav-item active">ABOUT</a>
+        <a th:href="@{/faq}" class="nav-item">FAQ</a>
+        <a th:href="@{/purchase}" class="nav-item">MAKE A PURCHASE</a>
+        <a th:href="@{/contact}" class="nav-item">CONTACT</a>
+        <a th:href="@{/login}" class="nav-item">LOGIN</a>
+    </div>
+</div>
+
+<main class="about-container">
+    <section class="about-section">
+        <h1>Company Mission</h1>
+        <p>
+            We strive to simplify access management through technology, replacing traditional methods with a
+            convenient solution. Our goal is to become the main provider of biometric and technology-driven access
+            solutions, creating a future where keyless entry is the standard for homes and properties worldwide.
+        </p>
+    </section>
+
+    <section class="about-section">
+        <h1>Services we offer</h1>
+        <p><strong>Core Features:</strong></p>
+        <ul>
+            <li>Remote access through a web app</li>
+            <li>Temporary access for property managers</li>
+            <li>Logging features for keeping track of usage</li>
+            <li>Notifying the user if an unauthorized entry has occurred</li>
+        </ul>
+        <p>
+            There is no need to replace the physical hardware, as the access tokens can be changed from the website.
+            The worries of losing your keys are addressed. Our product has an exciting appearance and offers an
+            interesting tech solution to your daily inconveniences.
+        </p>
+    </section>
+
+    <section class="about-section">
+        <h1>About our team</h1>
+        <p>
+            Our talented team is passionate about transforming access management through technology. Comprising
+            experts in software development, data analysis, quality control, and risk management, we bring a diverse
+            range of skills to the table. Each member plays a crucial role in delivering innovative, user-friendly
+            smart lock solutions that prioritize security and convenience.
+        </p>
+        <img src="/img/team.jpg" alt="Our Team" class="team-photo">
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>User Details</title>
+</head>
+<body>
+<section layout:fragment="content" class="container my-5">
+    <h2>User Details</h2>
+    <table class="table">
+        <tr>
+            <th>ID:</th>
+            <td th:text="${user.id}"></td>
+        </tr>
+        <tr>
+            <th>Username:</th>
+            <td th:text="${user.username}"></td>
+        </tr>
+        <tr>
+            <th>Email:</th>
+            <td th:text="${user.email}"></td>
+        </tr>
+        <tr>
+            <th>Temporary Access Start:</th>
+            <td th:text="${user.temporaryAccessStart}"></td>
+        </tr>
+        <tr>
+            <th>Temporary Access End:</th>
+            <td th:text="${user.temporaryAccessEnd}"></td>
+        </tr>
+        <tr>
+            <th>Role:</th>
+            <td th:text="${user.role}"></td>
+        </tr>
+    </table>
+</section>
+</body>
+</html>

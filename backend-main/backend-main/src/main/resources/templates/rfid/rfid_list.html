@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>Smart Lock Control - RFID List</title>
+    <style>
+        .status-indicator {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+        }
+
+        .status-true {
+            background-color: green;
+        }
+
+        .status-false {
+            background-color: red;
+        }
+
+        /* Toggle Switch Base Styles */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 25px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: red; /* Default: Deactivated (red) */
+            transition: .4s;
+            border-radius: 25px;
+        }
+
+        .slider::before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 3.5px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        /* Activated (green) styles */
+        input:checked + .slider {
+            background-color: green;
+        }
+
+        input:checked + .slider::before {
+            transform: translateX(25px); /* Move the knob to the right */
+        }
+    </style>
+
+    <script>
+        // Function to toggle activation and send the request to the server
+        function toggleRfidStatus(id) {
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            fetch(`/rfid/toggle/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken // Add the CSRF token to the request headers
+                }
+            }).then(response => {
+                if (response.ok) {
+                    location.reload(); // Reload the page to reflect the updated status
+                } else {
+                    alert('Failed to toggle status. Please try again.');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        }
+    </script>
+</head>
+<body>
+<section layout:fragment="content" class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">RFID Tags</h2>
+        <a href="/rfid/add" class="btn btn-primary">Add RFID</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered">
+            <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Credentials</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="rfid : ${rfids}">
+                <td th:text="${rfid.id}"></td>
+                <td th:text="${rfid.name}"></td>
+                <td th:text="${rfid.credentials}"></td>
+                <td>
+                    <!-- Conditional Status Indicator -->
+                    <span th:classappend="${rfid.active} ? 'status-indicator status-true' : 'status-indicator status-false'"></span>
+                </td>
+                <td>
+                    <a th:href="@{/rfid/update/{id}(id=${rfid.id})}" class="btn btn-warning btn-sm">Update</a>
+                    <a th:href="@{/rfid/delete/{id}(id=${rfid.id})}"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Are you sure you want to delete this RFID tag?');">
+                        Delete
+                    </a>
+
+
+                    <span class="me-2">Deactivate</span>
+                    <label class="switch">
+                        <input type="checkbox" th:checked="${rfid.active}" th:onclick="'toggleRfidStatus(' + ${rfid.id} + ')'">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="ms-2">Activate</span>
+
+                </td>
+
+
+                    <!-- Toggle Switch Container -->
+                    <!--<div class="d-flex align-items-center">
+                        <span class="me-2">Deactivate</span>
+                        &lt;!&ndash; Toggle Switch &ndash;&gt;
+                        <label class="switch">
+                            <input type="checkbox" th:checked="${rfid.active}" th:onclick="'toggleRfidStatus(' + ${rfid.id} + ')'">
+                            <span class="slider"></span>
+                        </label>
+                        &lt;!&ndash; Right Label &ndash;&gt;
+                        <span class="ms-2">Activate</span>
+                    </div>-->
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+</body>
+</html>

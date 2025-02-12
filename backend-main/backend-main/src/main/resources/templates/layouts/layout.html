@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Layout</title>
+    <link th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/css/app.css}" rel="stylesheet" />
+    <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}" defer></script>
+    <script th:src="@{/js/app.js}" defer></script>
+    <script th:src="@{/webjars/popper.js/2.11.6/umd/popper.min.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+</head>
+<body>
+    <div th:replace="fragments/navbar.html:: navbar"></div>
+
+    <div class="container-fluid p-0">
+        <div class="row g-0 ">
+            <!-- Sidebar -->
+            <aside class="col-md-2 bg-light p-2 ">
+                <div class="list-group min-vh-100">
+                    <a href="/dashboard" class="list-group-item list-group-item-action">Dashboard</a>
+                    <a href="/sensor" class="list-group-item list-group-item-action">Sensors</a>
+                    <a href="/rfid" class="list-group-item list-group-item-action">RFID Cards</a>
+                    <a href="/nfc" class="list-group-item list-group-item-action">NFC Cards</a>
+                    <a href="/fingerPrint" class="list-group-item list-group-item-action">Fingerprint</a>
+                    <div sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a href="/users/user-list" class="list-group-item list-group-item-action">Users</a>
+                    </div>
+
+                </div>
+            </aside>
+
+            <!-- Content -->
+            <main class="col-md-10 p-2">
+                    <section layout:fragment="content">
+                        <!-- Content goes here -->
+                    </section>
+            </main>
+        </div>
+    </div>
+
+
+
+</body>
+</html>

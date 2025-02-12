@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" rel="stylesheet" />
+    <title>Frequently Asked Questions</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f1f5f9;
+            color: #333;
+        }
+
+        /* Navbar styles */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #0056b3;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            height: 50px;
+            object-fit: contain;
+        }
+
+        .menu {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 5px 10px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background-color: #004494;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        /* FAQ-specific styles */
+        .faq-container {
+            max-width: 900px;
+            margin: 40px auto;
+            text-align: center;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .faq-title {
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+            color: #003366;
+            font-weight: bold;
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .faq-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background-color: #e3f2fd;
+            border: 1px solid #90caf9;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .faq-header:hover {
+            background-color: #bbdefb;
+        }
+
+        .faq-header p {
+            margin: 0;
+            font-weight: bold;
+            color: #0056b3;
+        }
+
+        .faq-icon {
+            height: 24px;
+            margin-right: 10px;
+        }
+
+        .faq-toggle {
+            font-size: 1.2rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #0056b3;
+        }
+
+        .faq-content {
+            display: none;
+            padding: 15px;
+            border-left: 3px solid #90caf9;
+            background-color: #e8f4fc;
+            margin-top: 5px;
+            border-radius: 5px;
+        }
+
+        .faq-content p {
+            margin: 0;
+            color: #333;
+        }
+
+        hr {
+            height: 1px;
+            border: none;
+            background-color: #ccc;
+            margin: 20px 0;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .menu {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .faq-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<div class="navbar">
+    <a class="navbar-brand d-flex align-items-center" href="/">
+        <img th:src="@{/img/logo/logo4.png}" alt="Logo" width="65px" class="m-2">
+        <span class="fs-2 fw-bold text-white">Smart Lock</span>
+    </a>
+    <div class="menu">
+        <a th:href="@{/}" class="nav-item">HOME</a>
+        <a th:href="@{/about}" class="nav-item">ABOUT</a>
+        <a th:href="@{/faq}" class="nav-item active">FAQ</a>
+        <a th:href="@{/purchase}" class="nav-item">MAKE A PURCHASE</a>
+        <a th:href="@{/contact}" class="nav-item">CONTACT</a>
+        <a th:href="@{/login}" class="nav-item">LOGIN</a>
+    </div>
+</div>
+
+<!-- FAQ Section -->
+<main class="faq-container">
+    <h1 class="faq-title">Frequently Asked Questions</h1>
+
+    <!-- Question 1 -->
+    <div class="faq-item">
+        <div class="faq-header">
+            <img src="/img/faq-icon.png" alt="FAQ Icon" class="faq-icon">
+            <p>How does SmartLock ensure the security of its keyless entry systems?</p>
+            <button class="faq-toggle">▼</button>
+        </div>
+        <div class="faq-content">
+            <p>SmartLock employs advanced encryption protocols to protect data transmission and ensure the security of its keyless entry systems. Each device is rigorously tested to prevent unauthorized access and meets industry standards for cybersecurity.</p>
+        </div>
+    </div>
+    <hr>
+
+    <!-- Question 2 -->
+    <div class="faq-item">
+        <div class="faq-header">
+            <img src="/img/faq-icon.png" alt="FAQ Icon" class="faq-icon">
+            <p>What support options are available if I encounter issues with my SmartLock product?</p>
+            <button class="faq-toggle">▼</button>
+        </div>
+        <div class="faq-content">
+            <p>SmartLock offers 24/7 customer support through email, phone, and live chat. You can also access a comprehensive troubleshooting guide on our website.</p>
+        </div>
+    </div>
+    <hr>
+
+    <!-- Question 3 -->
+    <div class="faq-item">
+        <div class="faq-header">
+            <img src="/img/faq-icon.png" alt="FAQ Icon" class="faq-icon">
+            <p>Can I install SmartLock by myself?</p>
+            <button class="faq-toggle">▼</button>
+        </div>
+        <div class="faq-content">
+            <p>Yes, SmartLock is designed for easy self-installation. The package includes a step-by-step guide and all necessary tools. However, professional installation is also available if you prefer assistance.</p>
+        </div>
+    </div>
+    <hr>
+</main>
+
+<script>
+    // JavaScript for FAQ Toggle
+    document.querySelectorAll('.faq-header').forEach(header => {
+        header.addEventListener('click', () => {
+            const content = header.nextElementSibling;
+            const toggleIcon = header.querySelector('.faq-toggle');
+
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+                toggleIcon.textContent = '▼';
+            } else {
+                content.style.display = 'block';
+                toggleIcon.textContent = '▲';
+            }
+        });
+    });
+</script>
+</body>
+</html>

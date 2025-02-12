@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Update RFID</title>
+</head>
+<body>
+<section layout:fragment="content" class="container my-5">
+    <h2>Update RFID</h2>
+    <form th:action="@{/rfid/update/{id}(id=${rfidCard.id})}" th:object="${rfidCard}" method="post">
+        <input type="hidden" name="id" th:value="${rfidCard.id}">
+
+        <!-- Name -->
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" th:field="*{name}">
+            <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        </div>
+
+        <!-- Credentials -->
+        <div class="mb-3">
+            <label for="credentials" class="form-label">Credentials</label>
+            <input type="text" class="form-control" id="credentials" th:field="*{credentials}" readonly>
+            <div class="text-danger" th:if="${#fields.hasErrors('credentials')}" th:errors="*{credentials}"></div>
+        </div>
+
+        <!-- Active Status -->
+        <div class="mb-3">
+            <label for="active" class="form-label">Active</label>
+            <select class="form-select" id="active" th:field="*{active}">
+                <option th:value="true" th:text="'Active'" th:selected="${rfidCard.active == true}"></option>
+                <option th:value="false" th:text="'Inactive'" th:selected="${rfidCard.active == false}"></option>
+            </select>
+            <div class="text-danger" th:if="${#fields.hasErrors('active')}" th:errors="*{active}"></div>
+        </div>
+
+        <!-- User Selection -->
+        <div class="mb-3">
+            <label for="user" class="form-label">User</label>
+            <select class="form-select" id="user" th:field="*{userId}">
+                <option value="" disabled>Select a user</option>
+                <option th:each="userOption : ${users}"
+                        th:value="${userOption.id}"
+                        th:text="${userOption.username}"
+                        th:selected="${rfidCard.userId == userOption.id}">
+                </option>
+            </select>
+            <div class="text-danger" th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}"></div>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+</section>
+</body>
+</html>

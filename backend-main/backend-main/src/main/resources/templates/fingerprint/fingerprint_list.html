@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout.html}">
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>Smart Lock Control - Fingerprint List</title>
+
+    <style>
+        .status-indicator {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+        }
+
+        .status-true {
+            background-color: green;
+        }
+
+        .status-false {
+            background-color: red;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 25px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: red;
+            transition: .4s;
+            border-radius: 25px;
+        }
+
+        .slider::before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 3.5px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: green;
+        }
+
+        input:checked + .slider::before {
+            transform: translateX(25px);
+        }
+    </style>
+
+    <script>
+        function toggleFingerprintStatus(id) {
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            fetch(`/fingerprint/toggle/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken // Add the CSRF token to the request headers
+                }
+            }).then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert('Failed to toggle status. Please try again.');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        }
+    </script>
+</head>
+
+<body>
+
+<section layout:fragment="content" class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">Fingerprint Tags</h2>
+        <a href="/fingerPrint/add" class="btn btn-primary">Add FINGERPRINT</a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered">
+            <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Credential</th>
+                <th>Status</th>
+                <th>Action</th>
+
+            <tbody>
+            <tbody>
+            <tr th:each="fingerprint : ${fingerprints}">
+                <td th:text="${fingerprint.id}"></td>
+                <td th:text="${fingerprint.name}"></td>
+                <td th:text="${fingerprint.credentials}"></td>
+                <td>
+                    <span th:classappend="${fingerprint.active} ? 'status-indicator status-true' : 'status-indicator status-false'"></span>
+                </td>
+                <td>
+
+                    <a th:href="@{/fingerprint/update/{id}(id=${fingerprint.id})}" class="btn btn-warning btn-sm">Update</a>
+                    <a th:href="@{/fingerprint/delete/{id}(id=${fingerprint.id})}"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Are you sure you want to delete this RFID tag?');">
+                        Delete
+                    </a>
+                    <!-- Toggle Switch for Deactivate/Activate -->
+                    <span class="me-2">Deactivate</span>
+                    <label class="switch">
+                        <input type="checkbox" th:checked="${fingerprint.active}" th:onclick="'toggleFingerprintStatus(' + ${fingerprint.id} + ')'">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="ms-2">Activate</span>
+                    <!-- Add any additional content here or remove this <td> if not needed -->
+
+                </td>
+            </tr>
+            </tbody>
+
+
+            </tr>
+            </thead>
+        </table>
+    </div>
+</section>
+
+</body>
+</html>

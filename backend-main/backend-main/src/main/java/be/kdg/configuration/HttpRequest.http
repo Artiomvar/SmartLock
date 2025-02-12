@@ -1,0 +1,15 @@
+
+POST http://localhost:8080/api/unlock
+Content-Type: application/json
+
+{
+  "mac": "34:B7:DA:65:F4:90",
+  "ipAddress": "172.20.10.7",
+  "method": "RFID",
+  "credentials": "530017E456F6"
+}
+
+
+
+
+

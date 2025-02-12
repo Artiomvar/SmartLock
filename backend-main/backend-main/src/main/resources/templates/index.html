@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      layout:decorate="~{layouts/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Smart Lock Control</title>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+
+    <style>
+        #world_map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+
+    <script>
+        let barChartUrl = '/api/user/bar-chart-data'
+        let barChartCategories = ['Users', 'Sensors', 'RFID Cards']
+        let pieChartUrl = '/api/user/pie-chart-data';
+        let pieChartTitle = 'User Types Distribution';
+        let pieChartLabels = ['Users', 'Sensors', 'RFID Cards'];
+        let lineChartUrl = '/api/user/line-chart-data';
+        let pieChartColors =['rgba(255, 69, 96, 0.9)', 'rgba(0, 143, 251, 0.9)', 'rgba(254, 176, 25, 0.9)'];
+
+        if ([[${#authorization.expression('hasRole("ROLE_ADMIN")')}]]) {
+            barChartUrl = '/api/admin/bar-chart-data'
+            barChartCategories = ['Users', 'Sensors', 'RFID Cards', 'Fingerprints', 'NFC Tags']
+
+            lineChartUrl = '/api/admin/line-chart-data';
+            pieChartUrl = '/api/admin/pie-chart-data';
+            pieChartTitle = 'User Types Distribution';
+            pieChartLabels=  ['Cleaning Person', 'Parent', 'Child'];
+            pieChartColors = ['rgba(255, 69, 96, 0.9)', 'rgba(0, 143, 251, 0.9)', 'rgba(254, 176, 25, 0.9)'];
+        } else {
+            barChartUrl = '/api/user/bar-chart-data';
+            barChartCategories = ['Sensors', 'RFID Cards', 'Nfc Cards', "Finger Print"]
+
+            lineChartUrl = '/api/user/line-chart-data';
+            pieChartUrl = '/api/user/pie-chart-data';
+            pieChartTitle = 'Day Time Distribution';
+            pieChartLabels=  ['Morning', 'Afternoon', 'Evening','Night'];
+            pieChartColors = ['#007BFF', '#FFD700', '#FF6347', '#00FA9A'];
+        }
+
+        document.addEventListener('DOMContentLoaded', async function () {
+            // bar chart user
+            const columnBarOptions = {
+                chart: {
+                    type: 'bar',
+                    height: 400
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        columnWidth: '50%'
+                    }
+                },
+                series: [{
+                    name: 'Count',
+                    data: await fetch(barChartUrl).then(response => response.json())
+                }],
+                xaxis: {
+                    categories: barChartCategories,
+                    title: {
+                        text: 'Categories'
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Count'
+                    }
+                },
+                title: {
+                    text: 'System Overview',
+                    align: 'center',
+                    style: {
+                        fontFamily: 'Nunito, sans-serif',
+                        fontWeight: 'bold',
+                        fontSize: '24px',
+                        color: '#333'
+                    }
+                },
+                colors: ['#00E396']
+            };
+            const columnBarChart = new ApexCharts(document.querySelector('#column_bar_chart'), columnBarOptions);
+            columnBarChart.render();
+
+
+            //access chart
+            const lineOptions = {
+                chart: {
+                    type: 'line',
+                    height: 400
+                },
+                series: [{
+                    name: 'Access Count',
+                    data: await fetch(lineChartUrl).then(response => response.json())
+                }],
+                xaxis: {
+                    categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                    title: {
+                        text: 'Day of the Week'
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Number of Times Doors Accessed'
+                    }
+                },
+                title: {
+                    text: 'Door Access Trends',
+                    style: {
+                        fontFamily: 'Nunito, sans-serif',
+                        fontWeight: 'bold',
+                        fontSize: '24px',
+                        color: '#333'
+                    },
+                    align: 'center'
+                },
+                colors: ['#008FFB']
+            };
+            const lineChart = new ApexCharts(document.querySelector('#door_access_chart'), lineOptions);
+            lineChart.render();
+
+            //pie chart
+            const pieOptions = {
+                chart: {
+                    type: 'donut',
+                    height: 400
+                },
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            size: '60%'
+                        }
+                    }
+                },
+                series: await fetch(pieChartUrl).then(response => response.json()),
+                labels: pieChartLabels,
+                title: {
+                    text: pieChartTitle,
+                    style: {
+                        fontFamily: 'Nunito, sans-serif',
+                        fontWeight: 'bold',
+                        fontSize: '24px',
+                        color: '#333'
+                    },
+                    align: 'center'
+                },
+                colors: pieChartColors,
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shade: 'dark',
+                        type: 'vertical',
+                        shadeIntensity: 0.5,
+                        gradientToColors: ['#FF4560', '#008FFB', '#FEB019'],
+                        inverseColors: true,
+                        opacityFrom: 0.9,
+                        opacityTo: 0.8
+                    }
+                },
+                legend: {
+                    position: 'bottom',
+                    markers: {
+                        radius: 12
+                    }
+                }
+            };
+            const pieChart = new ApexCharts(document.querySelector('#pie_chart'), pieOptions);
+            pieChart.render();
+
+            const worldMap = L.map('world_map').setView([20, 0], 2);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap'
+            }).addTo(worldMap);
+
+            const markers = await fetch('/api/admin/map')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Response data:', data);
+                    return data;
+                });
+
+            markers.forEach(marker => {
+                L.marker([marker.lat, marker.lng]).addTo(worldMap).bindPopup(`<b>${marker.label}</b>`);
+            });
+        });
+    </script>
+</head>
+<body>
+<section layout:fragment="content">
+<!--    <p>Name: <span th:text="${username}"></span></p>-->
+
+<!--    <div sec:authorize="hasRole('ROLE_ADMIN')">-->
+<!--        <a href="/books/delete">Delete admin</a>-->
+<!--    </div>-->
+<!--    <div sec:authorize="hasRole('ROLE_USER')">-->
+<!--        <a href="/books/delete">Delete user</a>-->
+<!--    </div>-->
+
+    <div class="container-fluid g-0">
+        <!--        //cards admin-->
+        <div class="d-flex justify-content-around flex-wrap mt-4" sec:authorize="hasRole('ROLE_ADMIN')">
+            <div class="flex-grow-1 p-2" style="max-width: 20%;">
+                <a href="/users" class="text-decoration-none">
+                    <div class="card text-center bg-primary text-white">
+                        <div class="card-body">
+                            <i class="fas fa-users icon"></i>
+                            <h3 class="card-title">Number of Users</h3>
+                            <p class="card-text" id="users-count" th:text="${userCount}">100</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="flex-grow-1 p-2" style="max-width: 20%;">
+                <a href="/sensors" class="text-decoration-none">
+                    <div class="card text-center bg-success text-white">
+                        <div class="card-body">
+                            <i class="fas fa-cogs icon"></i>
+                            <h3 class="card-title">Total Sensors</h3>
+                            <p class="card-text" id="sensors-count" th:text="${sensorCount}">50</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="flex-grow-1 p-2" style="max-width: 20%;">
+                <a href="/rfid-cards" class="text-decoration-none">
+                    <div class="card text-center bg-warning text-dark">
+                        <div class="card-body">
+                            <i class="fas fa-credit-card icon"></i>
+                            <h3 class="card-title">Total RFID Cards</h3>
+                            <p class="card-text" id="rfid-count" th:text="${rfidCount}">75</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="flex-grow-1 p-2" style="max-width: 20%;">
+                <a href="/fingerprints" class="text-decoration-none">
+                    <div class="card text-center bg-info text-white">
+                        <div class="card-body">
+                            <i class="fas fa-fingerprint icon"></i>
+                            <h3 class="card-title">Total Fingerprints</h3>
+                            <p class="card-text" id="fingerprint-count" th:text="${fingerprintCount}">0</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="flex-grow-1 p-2" style="max-width: 20%;">
+                <a href="/nfc-tags" class="text-decoration-none">
+                    <div class="card text-center bg-secondary text-white">
+                        <div class="card-body">
+                            <i class="fas fa-id-card icon"></i>
+                            <h3 class="card-title">Total NFC Tags</h3>
+                            <p class="card-text" id="nfc-count" th:text="${nfcCount}">0</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <!--        //cards user-->
+        <div class="d-flex justify-content-around flex-wrap mt-4" sec:authorize="hasRole('ROLE_USER')">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card bg-c-blue order-card h-100">
+                            <div class="card-block">
+                                <h1 class="m-b-20 text-center">Sensors</h1>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <img src="/assets/s1.png"
+                                         alt="Signal Icon"
+                                         style="width: 100px; height: 100px; opacity: 0.8;">
+                                    <h2 class="mb-0" th:text="${sensorCountForUser}">100</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card bg-c-green order-card h-100">
+                            <div class="card-block">
+                                <h1 class="m-b-20 text-center ">Rfid Cards</h1>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <img src="/assets/rfid.png"
+                                         alt="Signal Icon"
+                                         style="width: 100px; height: 100px; opacity: 0.8;">
+                                    <h2 class="mb-0" th:text="${rfidCountForUser}">100</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card bg-c-yellow order-card h-100">
+                            <div class="card-block">
+                                <h1 class="m-b-20 text-center ">Nfc Cards</h1>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <img src="/assets/nfc.png"
+                                         alt="Signal Icon"
+                                         style="width: 100px; height: 100px; opacity: 0.8;">
+                                    <h2 class="mb-0" th:text="${nfcCountForUser}">100</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card bg-c-pink order-card h-100">
+                            <div class="card-block">
+                                <h1 class="m-b-20 text-center ">Finger Print</h1>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <img src="/assets/finger.png"
+                                         alt="Signal Icon"
+                                         style="width: 100px; height: 100px; opacity: 0.8;">
+                                    <h2 class="mb-0" th:text="${fingerprintCountForUser}">100</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--        //charts-->
+        <div class="dashboard-container">
+            <div class="dashboard-card">
+                <div id="column_bar_chart" style="width: 100%; height: 400px;"></div>
+            </div>
+
+
+            <div class="dashboard-card">
+                <div id="door_access_chart" style="width: 100%; height: 400px;"></div>
+            </div>
+        </div>
+        <div class="dashboard-container mt-4">
+            <div class="dashboard-card">
+                <div id="pie_chart" style="width: 100%; height: 400px;"></div>
+            </div>
+            <div class="dashboard-card" sec:authorize="hasRole('ROLE_ADMIN')">
+                <h3>User Registrations by Country</h3>
+                <div id="world_map"></div>
+            </div>
+            <div class="dashboard-card" sec:authorize="hasRole('ROLE_USER')">
+
+                    <h3>Random Cat from CATAAS</h3><img
+                        src="https://cataas.com/cat?height=400" alt="Random Cat"
+                >
+            </div>
+        </div>
+        <div class="dashboard-container mt-4">
+            <div class="dashboard-card" sec:authorize="hasRole('ROLE_USER')">
+                <h3>Your Last Entries</h3>
+                <table class="table table-responsive table-sm">
+                    <thead class="table-info">
+                    <tr>
+                        <th>Method</th>
+                        <th>Success</th>
+                        <th>Timestamp</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${userLastEntryOwnDto}">
+                        <td th:text="${user.getMethod()}"></td>
+                        <td th:text="${user.isSuccess()}"></td>
+                        <td th:text="${user.getTimestamp()}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="dashboard-card" sec:authorize="hasRole('ROLE_ADMIN')">
+                <h3>Last User Entries</h3>
+                <table class="table table-striped table-bordered table-hover">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Username</th>
+                        <th>Last Entry Time</th>
+                        <th>Period of the Day</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="entry : ${lastEntryTimes}">
+                        <td th:text="${entry.getUserId}"></td> <!-- User ID -->
+                        <td th:text="${entry.username}"></td><!-- Username -->
+                        <td th:text="${entry.lastEntryTime}"></td>
+                        <td th:text="${entry.periodOfDay}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="dashboard-card" sec:authorize="hasRole('ROLE_ADMIN')">
+                <h3>Random Cat from CATAAS</h3><img
+                    src="https://cataas.com/cat?height=400" alt="Random Cat"
+            >
+            </div>
+        </div>
+    </div>
+
+
+</section>
+</body>
+</html>

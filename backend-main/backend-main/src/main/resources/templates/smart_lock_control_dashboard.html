@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      layout:decorate="~{layouts/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Smart Lock Control</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart', 'bar']});
+
+        google.charts.setOnLoadCallback(drawCharts);
+
+        function drawCharts() {
+            drawBarChart();
+            drawPieChart();
+            drawLineGraph();
+            drawHeatMap();
+        }
+
+        function drawBarChart() {
+            const data = new google.visualization.DataTable();
+            data.addColumn('string', 'Category');
+            data.addColumn('number', 'Count');
+            data.addRows([
+                ['Users', 100],
+                ['Sensors', 50],
+                ['RFID Cards', 75]
+            ]);
+
+            const options = {
+                title: 'System Overview',
+                width: 600,
+                height: 400,
+                chartArea: {width: '50%'},
+                hAxis: {title: 'Total Count', minValue: 0},
+                vAxis: {title: 'Category'}
+            };
+
+            const chart = new google.visualization.BarChart(document.getElementById('bar_chart_div'));
+            chart.draw(data, options);
+        }
+
+        function drawPieChart() {
+            const data = new google.visualization.DataTable();
+            data.addColumn('string', 'User Type');
+            data.addColumn('number', 'Count');
+            data.addRows([
+                ['Parent', 40],
+                ['Child', 30],
+                ['Cleaning Person', 30]
+            ]);
+
+            const options = {
+                title: 'User Types Distribution',
+                is3D: true,
+                width: 600,
+                height: 400
+            };
+
+            const chart = new google.visualization.PieChart(document.getElementById('pie_chart_div'));
+            chart.draw(data, options);
+        }
+
+        function drawLineGraph() {
+            const data = new google.visualization.DataTable();
+            data.addColumn('string', 'Time');
+            data.addColumn('number', 'Smart Lock Opens');
+            data.addRows([
+                ['00:00', 5],
+                ['06:00', 12],
+                ['12:00', 25],
+                ['18:00', 18],
+                ['24:00', 7]
+            ]);
+
+            const options = {
+                title: 'Smart Lock Usage Over Time',
+                curveType: 'function',
+                legend: {position: 'bottom'},
+                width: 600,
+                height: 400
+            };
+
+            const chart = new google.visualization.LineChart(document.getElementById('line_graph_div'));
+            chart.draw(data, options);
+        }
+
+        function drawHeatMap() {
+            const data = new google.visualization.DataTable();
+            data.addColumn('string', 'Country');
+            data.addColumn('number', 'Users');
+            data.addRows([
+                ['United States', 200],
+                ['India', 150],
+                ['Germany', 100],
+                ['Canada', 50],
+                ['Brazil', 30]
+            ]);
+
+            const options = {
+                title: 'User Distribution by Country',
+                region: 'world',
+                displayMode: 'markers',
+                colorAxis: {colors: ['#e7f0fa', '#023858']},
+                width: 600,
+                height: 400
+            };
+
+            const chart = new google.visualization.GeoChart(document.getElementById('heat_map_div'));
+            chart.draw(data, options);
+        }
+    </script>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container">
+        <div class="row mt-4">
+            <!-- Bar Chart Section -->
+            <div class="col-md-12">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h3 class="card-title">System Overview (Bar Chart)</h3>
+                        <div id="bar_chart_div"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pie Chart Section -->
+            <div class="col-md-12 mt-5">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h3 class="card-title">User Types Distribution (Pie Chart)</h3>
+                        <div id="pie_chart_div"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Line Graph Section -->
+            <div class="col-md-12 mt-5">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h3 class="card-title">Smart Lock Usage Over Time (Line Graph)</h3>
+                        <div id="line_graph_div"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Heat Map Section -->
+            <div class="col-md-12 mt-5">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h3 class="card-title">User Distribution by Country (Heat Map)</h3>
+                        <div id="heat_map_div"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Board for Door Openings -->
+            <div class="col-md-12 mt-5">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h3 class="card-title">Smart Lock History</h3>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Event</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>10:15 AM</td>
+                                    <td>Door opened by Parent</td>
+                                </tr>
+                                <tr>
+                                    <td>12:30 PM</td>
+                                    <td>Door opened by Cleaning Person</td>
+                                </tr>
+                                <tr>
+                                    <td>03:45 PM</td>
+                                    <td>Door opened by Child</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

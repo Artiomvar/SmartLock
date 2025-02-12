@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Smart Lock Control</title>
+
+</head>
+<body>
+<section layout:fragment="content" class="container my-5">
+    <h2>Update Sensor</h2>
+    <form th:action="@{/sensor/update/{id}(id=${sensor.id})}" th:object="${sensor}" method="post">
+        <div class="mb-3">
+            <label for="name" class="form-label">Sensor Name</label>
+            <input type="text" class="form-control" id="name" name="name" th:field="*{name}" required>
+            <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="mac" class="form-label">MAC Address</label>
+            <input type="text" class="form-control" id="mac" name="mac" th:field="*{mac}" required>
+            <div class="text-danger" th:if="${#fields.hasErrors('mac')}" th:errors="*{mac}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="ipAddress" class="form-label">IP Address</label>
+            <input type="text" class="form-control" id="ipAddress" name="ipAddress" th:field="*{ipAddress}" >
+            <!-- Error message for 'ip' -->
+            <div class="text-danger" th:if="${#fields.hasErrors('ipAddress')}" th:errors="*{ipAddress}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="status" class="form-label">Status</label>
+            <select class="form-select" id="status" name="status" th:field="*{status}" required>
+                <option th:value="true" th:text="'Active'"></option>
+                <option th:value="false" th:text="'Inactive'"></option>
+            </select>
+            <div class="text-danger" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></div>
+        </div>
+
+
+        <!-- Sensor Types (RFID, NFC, FingerPrint) -->
+        <div class="mb-3">
+            <label class="form-label">Sensor Types</label><br>
+
+            <!-- RFID Checkbox -->
+            <input type="checkbox" id="rfidCard" name="rfidCard" th:field="*{rfidCard}">
+            <label for="rfidCard" class="form-label ms-2">RFID</label>
+
+            <!-- NFC Checkbox -->
+            <input type="checkbox" id="nfc" name="nfc" th:field="*{nfc}">
+            <label for="nfc" class="form-label ms-2">NFC</label>
+
+            <!-- FingerPrint Checkbox -->
+            <input type="checkbox" id="fingerprint" name="fingerPrint" th:field="*{fingerPrint}">
+            <label for="fingerprint" class="form-label ms-2">FingerPrint</label>
+
+            <div class="text-danger" th:if="${#fields.hasErrors('rfidCard')}" th:errors="*{rfidCard}"></div>
+            <div class="text-danger" th:if="${#fields.hasErrors('nfc')}" th:errors="*{nfc}"></div>
+            <div class="text-danger" th:if="${#fields.hasErrors('fingerPrint')}" th:errors="*{fingerPrint}"></div>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+</section>
+
+
+</body>
+</html>

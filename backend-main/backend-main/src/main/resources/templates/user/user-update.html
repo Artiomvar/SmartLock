@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout.html}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Update User</title>
+</head>
+<body>
+
+<section layout:fragment="content" class="container my-5">
+    <h2 class="mb-4">Update User</h2>
+    <form th:action="@{/users/edit/{id}(id=${user.id})}" th:object="${user}" method="post">
+        <input type="hidden" name="id" th:value="${user.id}">
+        <!-- Name Field -->
+        <div class="mb-3">
+            <label for="username" class="form-label">User Name</label>
+            <input type="text" class="form-control" id="username" th:field="*{username}" placeholder="Enter user name">
+            <div class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+        </div>
+
+        <!-- Email Field -->
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="Enter email">
+            <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        </div>
+
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="Enter password">
+            <div class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+        </div>
+
+
+        <!-- Temporary Access Start -->
+        <div class="mb-3">
+            <label for="temporaryAccessStart" class="form-label">Temporary Access Start</label>
+            <input type="datetime-local" class="form-control" id="temporaryAccessStart" th:field="*{temporaryAccessStart}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('temporaryAccessStart')}" th:errors="*{temporaryAccessStart}"></div>
+        </div>
+
+        <!-- Temporary Access End -->
+        <div class="mb-3">
+            <label for="temporaryAccessEnd" class="form-label">Temporary Access End</label>
+            <input type="datetime-local" class="form-control" id="temporaryAccessEnd" th:field="*{temporaryAccessEnd}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('temporaryAccessEnd')}" th:errors="*{temporaryAccessEnd}"></div>
+        </div>
+
+
+
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+    </form>
+</section>
+
+</body>
+</html>

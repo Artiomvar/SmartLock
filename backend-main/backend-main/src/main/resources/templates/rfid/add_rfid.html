@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Add RFID</title>
+    <script>
+        async function handleRegister() {
+            const sensorId = document.getElementById('sensorId').value;
+            const userId = document.getElementById('userId').value;
+
+            if (!sensorId) {
+                alert('Please select a valid sensor before registering.');
+                return;
+            }
+            if (!userId) {
+                alert('Please select a valid user before registering.');
+                return;
+            }
+
+            const payload = { method: 'RFID', "lockId": sensorId };
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    const responseData = await response.json();
+                    document.getElementById('credentials').value = responseData.credentials;
+                } else {
+                    const errorMessage = await response.text();
+                    alert('Register failed: ' + errorMessage + sensorId);
+                }
+            } catch (error) {
+                console.error('Error during register:', error);
+                alert('An unexpected error occurred.');
+            }
+        }
+    </script>
+</head>
+<body>
+<section layout:fragment="content" class="container my-5">
+    <h2>Add RFID</h2>
+    <form th:action="@{/rfid/add}" th:object="${rfid}" method="post">
+        <!-- Name -->
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" th:field="*{name}">
+            <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        </div>
+
+        <!-- Credentials -->
+        <div class="mb-3">
+            <label for="credentials" class="form-label">Credentials</label>
+            <input type="text" class="form-control" id="credentials" th:field="*{credentials}" readonly>
+            <div class="text-danger" th:if="${#fields.hasErrors('credentials')}" th:errors="*{credentials}"></div>
+        </div>
+
+        <!-- Active Status -->
+        <div class="mb-3">
+            <label for="active" class="form-label">Active</label>
+            <select class="form-select" id="active" name="active" th:field="*{active}">
+                <option th:value="true" th:text="'Active'"></option>
+                <option th:value="false" th:text="'Inactive'"></option>
+            </select>
+            <div class="text-danger" th:if="${#fields.hasErrors('active')}" th:errors="*{active}"></div>
+        </div>
+
+        <!-- User Selection -->
+        <div class="mb-3">
+            <label for="userId" class="form-label">User</label>
+            <select class="form-select" id="userId" name="userId"
+                    onchange="window.location.href='?userId=' + this.value">
+                <option value="" disabled th:selected="${selectedUserId == null}" selected>Select a user</option>
+                <option th:each="user : ${users}"
+                        th:value="${user.id}"
+                        th:selected="${user.id == selectedUserId}"
+                th:text="${user.username}">
+                </option>
+            </select>
+            <div class="text-danger" th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}"></div>
+        </div>
+
+        <!-- Sensor Selection -->
+        <div class="mb-3">
+            <label for="sensorId" class="form-label">Sensor</label>
+            <select class="form-select" id="sensorId" name="sensorId" th:field="*{sensorId}" th:disabled="${#lists.isEmpty(sensors)}">
+                <option value="" disabled selected th:text="${#lists.isEmpty(sensors) ? 'No sensors available' : 'Select a sensor'}"></option>
+                <option th:each="sensor : ${sensors}" th:value="${sensor.id}" th:text="${sensor.name}"></option>
+            </select>
+            <div class="text-danger" th:if="${#fields.hasErrors('sensorId')}" th:errors="*{sensorId}"></div>
+        </div>
+
+
+        <!-- Buttons -->
+        <div class="d-flex gap-3">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-secondary" onclick="handleRegister()">Register</button>
+        </div>
+    </form>
+</section>
+
+</body>
+</html>

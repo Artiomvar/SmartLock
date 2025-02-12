@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" rel="stylesheet" />
+    <title>Contact - Smart Lock</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f1f5f9;
+            color: #333;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #003366;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Navbar styles */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #0056b3;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            height: 50px;
+            object-fit: contain;
+        }
+
+        .menu {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 5px 10px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background-color: #004494;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        /* Main content styles */
+        main {
+            padding: 40px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        input, textarea, button {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        button {
+            background-color: #0056b3;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #004494;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .menu {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            main {
+                padding: 20px;
+            }
+
+            form {
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<div class="navbar">
+    <a class="navbar-brand d-flex align-items-center" href="/">
+        <img th:src="@{/img/logo/logo4.png}" alt="Logo" width="65px" class="m-2">
+        <span class="fs-2 fw-bold text-white">Smart Lock</span>
+    </a>
+    <div class="menu">
+        <a th:href="@{/}" class="nav-item">HOME</a>
+        <a th:href="@{/about}" class="nav-item">ABOUT</a>
+        <a th:href="@{/faq}" class="nav-item">FAQ</a>
+        <a th:href="@{/purchase}" class="nav-item">MAKE A PURCHASE</a>
+        <a th:href="@{/contact}" class="nav-item active">CONTACT</a>
+        <a th:href="@{/login}" class="nav-item">LOGIN</a>
+    </div>
+</div>
+
+<!-- Contact Section -->
+<main>
+    <h1>Contact Us</h1>
+    <p>Have questions or need assistance with your Smart Lock system? Fill out the contact form and we’ll get back to you as soon as possible.</p>
+
+    <form>
+        <input type="text" name="name" placeholder="Full Name" required>
+        <input type="email" name="email" placeholder="Email Address" required>
+        <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+        <button type="submit">Send Message</button>
+    </form>
+</main>
+</body>
+</html>

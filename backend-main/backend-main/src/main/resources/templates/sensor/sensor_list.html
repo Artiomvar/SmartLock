@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Smart Lock Control</title>
+    <style>
+        .status-indicator {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+        }
+
+        .status-true {
+            background-color: green;
+        }
+
+        .status-false {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+<section layout:fragment="content" class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">Sensors</h2>
+        <a href="/sensor/add-sensor" class="btn btn-primary">Add Sensor</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered">
+            <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>NAME</th>
+                <th>MAC ADDRESS</th>
+                <th>IP ADDRESS</th>
+                <th>STATUS</th>
+                <th>ACTIONS</th>
+                <th>UNLOCK DOOR</th><!-- New column for actions -->
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="sensor : ${sensors}">
+                <td th:text="${sensor.id}"></td>
+                <td th:text="${sensor.name}"></td>
+                <td th:text="${sensor.mac}"></td>
+                <td th:text="${sensor.ipAddress}"></td>
+                <td>
+                    <div th:classappend="${sensor.status} ? 'status-indicator status-true' : 'status-indicator status-false'"></div>
+                </td>
+                <td>
+                    <a th:href="@{/sensor/update/{id}(id=${sensor.id})}" class="btn btn-warning btn-sm">Update</a>
+                    <a th:href="@{/sensor/delete/{id}(id=${sensor.id})}"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Are you sure you want to delete this sensor?');">
+                        Delete
+                    </a>
+
+                    <td>
+
+                    <form th:action="@{/sensor/unlock/{id}(id=${sensor.id})}" method="post"
+                          onsubmit="return confirm('Are you sure you want to unlock this sensor?');">
+                        <button type="submit" class="btn btn-success btn-sm">Unlock</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+</body>
+</html>

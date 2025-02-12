@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout.html}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>user creation</title>
+</head>
+<body>
+
+<section layout:fragment="content" class="container my-5">
+  <h2 class="mb-4">Create New User</h2>
+  <form th:object="${user}" action="/users/create" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <div th:if="${validationErrors}" class="alert alert-danger">
+      <ul>
+        <li th:each="error : ${validationErrors}" th:text="${error.getDefaultMessage()}"></li>
+      </ul>
+    </div>
+
+    <!-- Name Field -->
+    <div class="mb-3">
+      <label for="username">User Name </label>
+      <input type="text" class="form-control" id="username" name="username" th:field="*{username}" placeholder="Enter user name" >
+    </div>
+
+    <div class="mb-3">
+      <label for="email">Email </label>
+      <input type="email" class="form-control" id="email" name="email" th:field="*{email}" placeholder="Enter email">
+    </div>
+
+    <!-- Password Field -->
+    <div class="mb-3">
+      <label for="userPassword" class="form-label">Password:</label>
+      <input type="password" class="form-control" id="userPassword" name="password" th:field="*{password}" placeholder="Enter password" >
+    </div>
+
+    <!-- Confirm Password Field -->
+    <div class="mb-3">
+      <label for="confirmUserPassword" class="form-label">Confirm Password:</label>
+      <input type="password" class="form-control" id="confirmUserPassword" th:field="*{confirmPassword}" placeholder="Confirm your password" >
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary mt-3">Create User</button>
+  </form>
+</section>
+
+
+</body>
+</html>

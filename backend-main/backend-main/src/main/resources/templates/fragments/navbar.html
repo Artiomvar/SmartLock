@@ -1,0 +1,82 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+</head>
+<body>
+
+
+<div th:fragment="navbar">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img th:src="@{/img/logo/logo4.png}" alt="Logo" width="65px" class="m-2">
+                <span class="fs-2 fw-bold">Smart Lock</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+
+                </ul>
+
+                <div class="d-flex align-items-center dropdown me-3">
+                    <span th:text="${username}" class="fw-bold text-white me-2"></span><img
+                        th:src="@{https://avatar.iran.liara.run/public/32}" alt="Profile Picture"
+                        style="width: 32px; border: 2px solid red; border-radius: 50%; cursor: pointer;"
+                        class="dropdown-toggle"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <form class="dropdown-item p-0" th:action="@{/logout}" method="post">
+                                <button class="btn btn-link p-2 text-decoration-none" type="submit">Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                <div class="d-flex align-items-center dropdown me-3 ">
+                    <button class="btn btn-light position-relative p-0" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        <img src="/assets/notify.png" alt="Notification Icon" width="30">
+                        <span th:if="${notificationCount > 0}" th:text="${notificationCount}"
+                              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-scroll">
+                        <li th:each="notification : ${notifications}"
+                            th:classappend="${notification.read ? 'bg-light' : 'bg-warning'}">
+                            <form th:action="@{/notifications/{id}/read(id=${notification.id})}" th:method="post"
+                                  style="display: inline;">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                <button type="submit" class="dropdown-item"
+                                        th:text="${notification.read ? notification.message : notification.message + ' (unread)'}"
+                                        style="transition: background-color 0.3s;"
+                                        onmouseover="this.style.backgroundColor='lightgreen'"
+                                        onmouseout="this.style.backgroundColor=''"></button>
+                            </form>
+                        </li>
+
+                        <li th:if="${#lists.isEmpty(notifications)}">
+        <span class="dropdown-item text-muted" style="transition: background-color 0.3s;"
+              onmouseover="this.style.backgroundColor='#f0f0f0'"
+              onmouseout="this.style.backgroundColor=''">No notifications</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+
+</body>
+</html>

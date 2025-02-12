@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>add fingerPrint</title>
+</head>
+<body>
+
+<section layout:fragment="content" class="container my-5">
+    <h2>Add FINGERPRINT</h2>
+    <form th:action="@{/fingerprint/add}" th:object="${fingerprint}" method="post">
+        <!-- Name -->
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" th:field="*{name}">
+            <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        </div>
+
+        <!-- Credentials -->
+        <div class="mb-3">
+            <label for="credential" class="form-label">Credentials</label>
+            <input type="text" class="form-control" id="credential" th:field="*{credential}">
+            <div class="text-danger" th:if="${#fields.hasErrors('credential')}" th:errors="*{credential}"></div>
+        </div>
+
+        <!-- Active Status -->
+        <div class="mb-3">
+            <label for="active" class="form-label">Active</label>
+            <select class="form-select" id="active" name="active" th:field="*{active}">
+                <option th:value="true" th:text="'Active'"></option>
+                <option th:value="false" th:text="'Inactive'"></option>
+            </select>
+            <div class="text-danger" th:if="${#fields.hasErrors('active')}" th:errors="*{active}"></div>
+        </div>
+
+        <!-- User Selection -->
+        <div class="mb-3">
+            <label for="userId" class="form-label">User</label>
+            <select class="form-select" id="userId" th:field="*{userId}">
+                <option value="" disabled selected>Select a user</option>
+                <option th:each="user : ${users}"
+                        th:value="${user.id}"
+                        th:text="${user.username}">
+                </option>
+            </select>
+            <div class="text-danger" th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</section>
+
+
+
+
+
+
+
+
+</body>
+</html>

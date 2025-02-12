@@ -1,0 +1,125 @@
+    <!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Login</title>
+        <!-- Link Bootstrap CSS from WebJars -->
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+        <style>
+            /* Keyframes for background gradient animation */
+            @keyframes gradientAnimation {
+                0% {
+                    background-position: 0% 50%;
+                }
+                50% {
+                    background-position: 100% 50%;
+                }
+                100% {
+                    background-position: 0% 50%;
+                }
+            }
+
+            /* Apply the animation to the body or any container */
+            body {
+                height: 100vh;
+                background: linear-gradient(45deg, rgb(0, 148, 254), #ffffff);
+                background-size: 400% 400%;
+                animation: gradientAnimation 5s ease infinite;
+                margin: 0;
+                font-family: Arial, sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .login-form {
+                background-color: #ffffff;
+                padding: 40px;
+                border-radius: 10px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                width: 100%;
+                max-width: 400px;
+            }
+
+            .login-form h2 {
+                margin-bottom: 20px;
+                text-align: center;
+                font-weight: 600;
+            }
+
+            .form-control {
+                margin-bottom: 20px;
+            }
+
+            .btn-login {
+                background: linear-gradient(45deg, #bf00fe, rgb(16, 50, 154));
+                color: white;
+                border: none;
+                width: 100%;
+            }
+
+            .btn-login:hover {
+                background: linear-gradient(45deg, #2575fc, #6a11cb);
+            }
+
+            .forgot-password {
+                text-align: center;
+                margin-top: 10px;
+            }
+
+            .forgot-password a {
+                text-decoration: none;
+                color: #2575fc;
+            }
+
+            .signup-link {
+                text-align: center;
+                margin-top: 15px;
+            }
+
+            .signup-link a {
+                text-decoration: none;
+                color: #2575fc;
+            }
+        </style>
+    </head>
+    <body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <!-- Larger form container, centered with more space -->
+            <div class="col-md-6 col-lg-4 login-container">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h4>Login</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Login Form -->
+                        <form th:action="@{/login}"  method="post">
+                            <div class="form-group">
+                                <label for="username">Email</label>
+                                <input name="username" class="form-control" id="username" type="text" >
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input name="password" type="password" class="form-control" id="password" >
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Login</button>
+                        </form>
+                        <!-- Error message -->
+                        <!--<div th:if="${error}" class="alert alert-danger mt-3">
+                            <p th:text="${error}"></p>
+                        </div>-->
+                        <!-- Registration link -->
+                        <div class="signup-link">
+                            <p>Don't have an account? <a href="/register">Register here</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Link Bootstrap JS from WebJars -->
+    <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+    </body>
+    </html>
